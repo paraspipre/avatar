@@ -74,7 +74,8 @@ def generate_image(base_request,req_id):
     state_dict,
     network_alphas=network_alphas,
     unet=model.unet,
-    low_cpu_mem_usage=False
+    low_cpu_mem_usage=False,
+    ignore_mismatched_sizes=True
     )
 
     # Decode the base64-encoded image
