@@ -7,7 +7,7 @@ from models.base_request_model import BaseSDRequest
 load_dotenv()
 
 # Base API URL
-BASE_URL = os.getenv("BASE_URL") or "https://f1fd-3-135-152-169.ngrok-free.app"
+BASE_URL = os.getenv("BASE_URL") or "https://c88d-34-70-131-173.ngrok.io"
 
 def send_api_request(base_request: BaseSDRequest):
     api_url = f"{BASE_URL}/generateImage"
