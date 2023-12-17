@@ -68,11 +68,13 @@ def generate_image(base_request,req_id):
     state_dict, network_alphas = model.lora_state_dict(
     "/content/drive/MyDrive/Harrlogos_v2.0.safetensors",
     unet_config=model.unet.config,
+    torch_dtype=d_type, variant="fp16", use_safetensors=True
     )
     model.load_lora_into_unet(
     state_dict,
     network_alphas=network_alphas,
-    unet=model.unet
+    unet=model.unet,
+    low_cpu_mem_usage=False
     )
 
     # Decode the base64-encoded image
