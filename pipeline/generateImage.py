@@ -64,7 +64,7 @@ def generate_image(base_request,req_id):
         torch_dtype=d_type, variant="fp16", use_safetensors=True
     ).to(device)
 
-    # model.load_lora_weights("/content/drive/MyDrive/Harrlogos_v2.0.safetensors", weight_name="Harrlogos_v2.0.safetensors")
+    model.load_lora_weights("/content/drive/MyDrive/Harrlogos_v2.0.safetensors", weight_name="Harrlogos_v2.0.safetensors")
     # state_dict, network_alphas = model.lora_state_dict(
     # "/content/drive/MyDrive/Harrlogos_v2.0.safetensors",
     # unet_config=model.unet.config,
@@ -107,11 +107,11 @@ def generate_image(base_request,req_id):
     final_image_path = "output.png"
     image.save(final_image_path)
     image.save("output_preview.png")
-    print("roopstart")
-    roop_image_path = get_roop_enhanced_image(user_image_path, final_image_path)
-    print("roopdone")
-    return roop_image_path
-    # return final_image_path
+    # print("roopstart")
+    # roop_image_path = get_roop_enhanced_image(user_image_path, final_image_path)
+    # print("roopdone")
+    # return roop_image_path
+    return final_image_path
 
     
 
@@ -155,7 +155,7 @@ def delete_image_file(file_path):
 
 def run_generate(base_request,req_id) -> str:
     final_image_path = generate_image(base_request, req_id)
-    generated_image_encoded = encode_image("../../"+final_image_path)
+    generated_image_encoded = encode_image(final_image_path)
     # once get it encoded, delete the file
    #  delete_image_file(final_image_path)
     return generated_image_encoded

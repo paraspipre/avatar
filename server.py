@@ -27,7 +27,7 @@ async def generate_image(base_request: BaseSDRequest):
     try:
 
         req_id = datetime.now().strftime("%Y%m%d%H%M%S")
-        print(req_id)
+        # print(req_id)
         # Call the inpainting function
         generated_image_encoded = run_generate(base_request, req_id)
 
