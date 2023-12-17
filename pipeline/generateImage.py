@@ -131,15 +131,15 @@ def get_roop_enhanced_image(user_image_path, generated_image_path):
         subprocess.run(command, shell=True, check=True)
     except subprocess.CalledProcessError as e:
         # Reset the working directory to the original directory
-        # os.chdir(os.path.dirname(__file__))
+        os.chdir(os.path.dirname(__file__))
 
         # Raise a ValueError if the subprocess fails
         raise ValueError(f"Roop enhancement failed: {e}")
 
     finally:
         # Reset the working directory to the original directory (in case of an exception)
-        # os.chdir(os.path.dirname(__file__))
-        pass
+        os.chdir(os.path.dirname(__file__))
+        
 
     return roop_image_path
 
