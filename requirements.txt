@@ -1,0 +1,17 @@
+Pillow
+transformers
+diffusers
+fastapi
+requests
+uvicorn
+python-dotenv
+controlnet_hinter==0.0.5
+pyngrok
+accelerate
+
+# roop dependencies
+onnxruntime-gpu==1.15.1
+customtkinter
+tkinterdnd2
+insightface
+opennsfw2
