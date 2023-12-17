@@ -64,19 +64,19 @@ def generate_image(base_request,req_id):
         torch_dtype=d_type, variant="fp16", use_safetensors=True
     ).to(device)
 
-    # model.load_lora_weights("/content/drive/MyDrive/Harrlogos_v2.0.safetensors", weight_name="Harrlogos_v2.0.safetensors")
-    state_dict, network_alphas = model.lora_state_dict(
-    "/content/drive/MyDrive/Harrlogos_v2.0.safetensors",
-    unet_config=model.unet.config,
-    torch_dtype=d_type, variant="fp16", use_safetensors=True,ignore_mismatched_sizes=True
-    )
-    model.load_lora_into_unet(
-    state_dict,
-    network_alphas=network_alphas,
-    unet=model.unet,
-    low_cpu_mem_usage=False,
-    # ignore_mismatched_sizes=True
-    )
+    model.load_lora_weights("/content/drive/MyDrive/Harrlogos_v2.0.safetensors", weight_name="Harrlogos_v2.0.safetensors")
+    # state_dict, network_alphas = model.lora_state_dict(
+    # "/content/drive/MyDrive/Harrlogos_v2.0.safetensors",
+    # unet_config=model.unet.config,
+    # torch_dtype=d_type, variant="fp16", use_safetensors=True,ignore_mismatched_sizes=True
+    # )
+    # model.load_lora_into_unet(
+    # state_dict,
+    # network_alphas=network_alphas,
+    # unet=model.unet,
+    # low_cpu_mem_usage=False,
+    # # ignore_mismatched_sizes=True
+    # )
 
     # Decode the base64-encoded image
    #  control_net_image = decode_base64_image(base_request.encoded_control_net_image)
