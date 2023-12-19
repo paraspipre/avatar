@@ -177,8 +177,6 @@ def generateCanny(base_request,req_id):
     user_image = decode_base64_image(base_request.encoded_image)
     user_image_path = "user_image.png"
     user_image.save(user_image_path)
-
-
     image = np.array(user_image)
 
     low_threshold = 100
@@ -195,9 +193,9 @@ def generateCanny(base_request,req_id):
         torch_dtype=torch.float16,
         use_safetensors=True
     )
-    print("done1")
+  
     vae = AutoencoderKL.from_pretrained("madebyollin/sdxl-vae-fp16-fix", torch_dtype=torch.float16, use_safetensors=True)
-    print("done2")
+  
     pipe = StableDiffusionXLControlNetPipeline.from_pretrained(
         "stabilityai/stable-diffusion-xl-base-1.0",
         controlnet=controlnet,
@@ -205,17 +203,18 @@ def generateCanny(base_request,req_id):
         torch_dtype=torch.float16,
         use_safetensors=True
     )
-    print("done3")
+    
     pipe.enable_model_cpu_offload()
-    print("done4")
+    
     prompt = "aerial view, a futuristic research complex in a bright foggy jungle, hard lighting"
     negative_prompt = 'low quality, bad quality, sketches'
 
     image = pipe(
-        prompt,
+        prompt=prompt,
         negative_prompt=negative_prompt,
         image=canny_image,
         controlnet_conditioning_scale=0.5,
+        guess_mode=True,
     ).images[0]
     print("done5")
     image.save("canny_output.png")
