@@ -1,6 +1,6 @@
 # set up
 import torch
-from diffusers import AutoPipelineForText2Image, MotionAdapter, AnimateDiffPipeline, DDIMScheduler,StableDiffusionXLControlNetPipeline, ControlNetModel, AutoencoderKL,StableDiffusionControlNetPipeline
+from diffusers import AutoPipelineForText2Image, MotionAdapter, AnimateDiffPipeline, DDIMScheduler,StableDiffusionXLControlNetPipeline, ControlNetModel, AutoencoderKL,StableDiffusionControlNetPipeline,UniPCMultistepScheduler
 from diffusers.utils import export_to_gif,load_image, make_image_grid
 from PIL import Image
 import cv2
@@ -207,7 +207,7 @@ def generateCanny(base_request,req_id):
     controlnet = ControlNetModel.from_pretrained("lllyasviel/sd-controlnet-canny", use_safetensors=True)
     pipe = StableDiffusionControlNetPipeline.from_pretrained("runwayml/stable-diffusion-v1-5", controlnet=controlnet, use_safetensors=True).to("cuda")
 
-
+    pipe.scheduler = UniPCMultistepScheduler.from_config(pipe.scheduler.config)
     pipe.enable_model_cpu_offload()
     
     prompt = "aerial view, a futuristic research complex in a bright foggy jungle, hard lighting"
