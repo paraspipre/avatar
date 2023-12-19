@@ -174,7 +174,7 @@ def generateCanny(base_request,req_id):
 
     original_image = load_image("user_image.png")
 
-    image = np.array(original_image)
+    image = np.array(user_image)
 
     low_threshold = 100
     high_threshold = 200
