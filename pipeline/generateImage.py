@@ -239,13 +239,15 @@ def generateOpenpose(base_request,req_id):
     openpose_image = openpose(user_image)
     openpose_image.save("openpose.png")
     controlnet = ControlNetModel.from_pretrained(
-        "thibaud/controlnet-openpose-sdxl-1.0", torch_dtype=torch.float16
+        "lllyasviel/sd-controlnet-openpose", use_safetensors=True
     )
 
-    vae = AutoencoderKL.from_pretrained("madebyollin/sdxl-vae-fp16-fix", torch_dtype=torch.float16, use_safetensors=True)
-    pipe = StableDiffusionXLControlNetPipeline.from_pretrained(
-        "stabilityai/stable-diffusion-xl-base-1.0", controlnet=controlnet, vae=vae, torch_dtype=torch.float16, use_safetensors=True
-    )
+    pipe = StableDiffusionControlNetPipeline.from_pretrained("runwayml/stable-diffusion-v1-5",safety_checker=None, controlnet=controlnet, use_safetensors=True).to("cuda")
+
+    # vae = AutoencoderKL.from_pretrained("madebyollin/sdxl-vae-fp16-fix", torch_dtype=torch.float16, use_safetensors=True)
+    # pipe = StableDiffusionXLControlNetPipeline.from_pretrained(
+    #     "stabilityai/stable-diffusion-xl-base-1.0", controlnet=controlnet, vae=vae, torch_dtype=torch.float16, use_safetensors=True
+    # )
     pipe.scheduler = UniPCMultistepScheduler.from_config(pipe.scheduler.config)
     pipe.enable_model_cpu_offload()
 
