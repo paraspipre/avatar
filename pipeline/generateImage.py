@@ -217,7 +217,7 @@ def generateCanny(base_request,req_id):
         prompt=base_request.prompt,
         negative_prompt=base_request.negative_prompt,
         image=canny_image,
-        controlnet_conditioning_scale=0.5,
+        guidance_scale=3.0,
         guess_mode=True,
     ).images[0]
     image.save("canny_output.png")
