@@ -2,7 +2,7 @@ import os
 from fastapi import FastAPI, HTTPException
 import uvicorn
 from models.base_request_model import BaseSDRequest, BaseSDRequestVideo, BaseSDRequestLogo, BaseSDRequestCanny,BaseSDRequestOpenpose
-from pipeline.generateImage import generateImage,generateLogo,generateVideo, generateCanny, generateOpenpose
+from pipeline.generateImage import generateImage,generateLogo,generateVideo, generateCanny
 from datetime import datetime
 from pyngrok import ngrok
 from fastapi.middleware.cors import CORSMiddleware
@@ -93,23 +93,23 @@ async def generate_canny(base_request: BaseSDRequestCanny):
         print(f"Exception occurred with error as {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
-@app.post("/generateOpenpose")
-async def generate_openpose(base_request: BaseSDRequestOpenpose):
-    try:
+# @app.post("/generateOpenpose")
+# async def generate_openpose(base_request: BaseSDRequestOpenpose):
+#     try:
 
-        req_id = datetime.now().strftime("%Y%m%d%H%M%S")
-        # print(req_id)
-        # Call the inpainting function
-        generated_image_encoded = generateOpenpose(base_request, req_id)
+#         req_id = datetime.now().strftime("%Y%m%d%H%M%S")
+#         # print(req_id)
+#         # Call the inpainting function
+#         generated_image_encoded = generateOpenpose(base_request, req_id)
 
-        return {
-            "prompt": base_request.prompt,
-            "generated_image_encoded": generated_image_encoded
-        }
+#         return {
+#             "prompt": base_request.prompt,
+#             "generated_image_encoded": generated_image_encoded
+#         }
 
-    except Exception as e:
-        print(f"Exception occurred with error as {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+#     except Exception as e:
+#         print(f"Exception occurred with error as {e}")
+#         raise HTTPException(status_code=500, detail=str(e))
 
 
 
