@@ -1,6 +1,6 @@
 # set up
 import torch
-from diffusers import AutoPipelineForText2Image, MotionAdapter, AnimateDiffPipeline, DDIMScheduler,StableDiffusionXLControlNetPipeline, ControlNetModel, AutoencoderKL
+from diffusers import AutoPipelineForText2Image, MotionAdapter, AnimateDiffPipeline, DDIMScheduler,StableDiffusionXLControlNetPipeline, ControlNetModel, AutoencoderKL,StableDiffusionControlNetPipeline
 from diffusers.utils import export_to_gif,load_image, make_image_grid
 from PIL import Image
 import cv2
@@ -188,22 +188,26 @@ def generateCanny(base_request,req_id):
     canny_image = Image.fromarray(image)
     canny_image.save("cannyImage.png")
 
-    controlnet = ControlNetModel.from_pretrained(
-        "diffusers/controlnet-canny-sdxl-1.0",
-        torch_dtype=torch.float16,
-        use_safetensors=True
-    )
+    # controlnet = ControlNetModel.from_pretrained(
+    #     "diffusers/controlnet-canny-sdxl-1.0",
+    #     torch_dtype=torch.float16,
+    #     use_safetensors=True
+    # )
   
-    vae = AutoencoderKL.from_pretrained("madebyollin/sdxl-vae-fp16-fix", torch_dtype=torch.float16, use_safetensors=True)
+    # vae = AutoencoderKL.from_pretrained("madebyollin/sdxl-vae-fp16-fix", torch_dtype=torch.float16, use_safetensors=True)
   
-    pipe = StableDiffusionXLControlNetPipeline.from_pretrained(
-        "stabilityai/stable-diffusion-xl-base-1.0",
-        controlnet=controlnet,
-        vae=vae,
-        torch_dtype=torch.float16,
-        use_safetensors=True
-    )
+    # pipe = StableDiffusionXLControlNetPipeline.from_pretrained(
+    #     "stabilityai/stable-diffusion-xl-base-1.0",
+    #     controlnet=controlnet,
+    #     vae=vae,
+    #     torch_dtype=torch.float16,
+    #     use_safetensors=True
+    # )
     
+    controlnet = ControlNetModel.from_pretrained("lllyasviel/sd-controlnet-canny", use_safetensors=True)
+    pipe = StableDiffusionControlNetPipeline.from_pretrained("runwayml/stable-diffusion-v1-5", controlnet=controlnet, use_safetensors=True).to("cuda")
+
+
     pipe.enable_model_cpu_offload()
     
     prompt = "aerial view, a futuristic research complex in a bright foggy jungle, hard lighting"
