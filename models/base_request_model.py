@@ -50,7 +50,7 @@ class BaseSDRequestCanny(BaseModel):
 
 class BaseSDRequestOpenpose(BaseModel):
     prompt: str ="superman"
-    # encoded_image: str
+    encoded_image: str
     height: int = 512
     width: int=512
     negative_prompt: str = "deformed, nsfw, blurr"

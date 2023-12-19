@@ -6,6 +6,8 @@ from PIL import Image
 import cv2
 import numpy as np
 
+from controlnet_aux import OpenposeDetector
+
 # from utils.control_net_utils import CONTROLNET_MAPPING
 # from IP_Adapter.ip_adapter.ip_adapter import IPAdapter, IPAdapterPlus
 
@@ -227,7 +229,41 @@ def generateCanny(base_request,req_id):
    #  delete_image_file(final_image_path)
     return generated_image_encoded
 
-# def generateOpenpose(base_request,req_id):
+def generateOpenpose(base_request,req_id):
+
+    user_image = decode_base64_image(base_request.encoded_image)
+    user_image_path = "user_image.png"
+    user_image.save(user_image_path)
+
+    openpose = OpenposeDetector.from_pretrained("lllyasviel/ControlNet")
+    openpose_image = openpose(user_image)
+    openpose_image.save("openpose.png")
+    controlnet = ControlNetModel.from_pretrained(
+        "thibaud/controlnet-openpose-sdxl-1.0", torch_dtype=torch.float16
+    )
+
+    vae = AutoencoderKL.from_pretrained("madebyollin/sdxl-vae-fp16-fix", torch_dtype=torch.float16, use_safetensors=True)
+    pipe = StableDiffusionXLControlNetPipeline.from_pretrained(
+        "stabilityai/stable-diffusion-xl-base-1.0", controlnet=controlnet, vae=vae, torch_dtype=torch.float16, use_safetensors=True
+    )
+    pipe.scheduler = UniPCMultistepScheduler.from_config(pipe.scheduler.config)
+    pipe.enable_model_cpu_offload()
+
+    
+    
+    image = pipe(
+        prompt=base_request.prompt,
+        negative_prompt=base_request.negative_prompt,
+        image=openpose_image,
+        guidance_scale=3.0,
+        guess_mode=True,
+    ).images[0]
+    image.save("openpose_output.png")
+
+    generated_image_encoded = encode_image("openpose_output.png")
+    # once get it encoded, delete the file
+   #  delete_image_file(final_image_path)
+    return generated_image_encoded
 
 
 def generateLogo(base_request,req_id):
