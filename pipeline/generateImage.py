@@ -167,12 +167,21 @@ def generateVideo(base_request,req_id):
     return generated_image_encoded
     # return "okay"
 
+import re
+from PIL import Image
+import base64
+from io import BytesIO
+
 def generateCanny(base_request,req_id):
-    user_image = decode_base64_image(base_request.encoded_image)
+
+
+    im_bytes = base64.b64decode(base_request.encoded_image)   # im_bytes is a binary image
+    im_file = BytesIO(im_bytes)  # convert image to file-like object
+    user_image = Image.open(im_file)
+
     user_image_path = "user_image.png"
     user_image.save(user_image_path)
 
-    original_image = load_image("user_image.png")
 
     image = np.array(user_image)
 
