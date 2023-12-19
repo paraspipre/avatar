@@ -1,11 +1,13 @@
 import os
 from fastapi import FastAPI, HTTPException
 import uvicorn
-from models.base_request_model import BaseSDRequest
-from pipeline.generateImage import run_generate
+from models.base_request_model import BaseSDRequest, BaseSDRequestVideo, BaseSDRequestLogo
+from pipeline.generateImage import generateImage,generateLogo,generateVideo
 from datetime import datetime
 from pyngrok import ngrok
 from fastapi.middleware.cors import CORSMiddleware
+
+
 app = FastAPI()
 
 origins = ["*"]
@@ -19,17 +21,50 @@ app.add_middleware(
 )
 
 @app.get("/check")
-async def heartbeat():
-   return {"status":"alive"}
+async def check():
+   return "server is running"
 
 @app.post("/generateImage")
 async def generate_image(base_request: BaseSDRequest):
+    try:
+        req_id = datetime.now().strftime("%Y%m%d%H%M%S")
+
+        generated_image_encoded = generateImage(base_request, req_id)
+
+        return {
+            "prompt": base_request.prompt,
+            "generated_image_encoded": generated_image_encoded
+        }
+
+    except Exception as e:
+        print(f"Exception occurred with error as {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+    
+@app.post("/generateVideo")
+async def generate_video(base_request: BaseSDRequestVideo):
+    try:
+
+        req_id = datetime.now().strftime("%Y%m%d%H%M%S")
+
+        generated_image_encoded = generateVideo(base_request, req_id)
+
+        return {
+            "prompt": base_request.prompt,
+            "generated_image_encoded": generated_image_encoded
+        }
+
+    except Exception as e:
+        print(f"Exception occurred with error as {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+    
+@app.post("/generateLogo")
+async def generate_logo(base_request: BaseSDRequestLogo):
     try:
 
         req_id = datetime.now().strftime("%Y%m%d%H%M%S")
         # print(req_id)
         # Call the inpainting function
-        generated_image_encoded = run_generate(base_request, req_id)
+        generated_image_encoded = generateLogo(base_request, req_id)
 
         return {
             "prompt": base_request.prompt,
