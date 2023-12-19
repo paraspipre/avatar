@@ -210,17 +210,16 @@ def generateCanny(base_request,req_id):
     pipe.scheduler = UniPCMultistepScheduler.from_config(pipe.scheduler.config)
     pipe.enable_model_cpu_offload()
     
-    prompt = "aerial view, a futuristic research complex in a bright foggy jungle, hard lighting"
-    negative_prompt = 'low quality, bad quality, sketches'
+    # prompt = "aerial view, a futuristic research complex in a bright foggy jungle, hard lighting"
+    # negative_prompt = 'low quality, bad quality, sketches'
 
     image = pipe(
-        prompt=prompt,
-        negative_prompt=negative_prompt,
+        prompt=base_request.prompt,
+        negative_prompt=base_request.negative_prompt,
         image=canny_image,
         controlnet_conditioning_scale=0.5,
         guess_mode=True,
     ).images[0]
-    print("done5")
     image.save("canny_output.png")
 
     generated_image_encoded = encode_image("canny_output.png")
