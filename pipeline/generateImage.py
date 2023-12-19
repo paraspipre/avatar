@@ -174,11 +174,7 @@ from io import BytesIO
 
 def generateCanny(base_request,req_id):
 
-
-    im_bytes = base64.b64decode(base_request.encoded_image)   # im_bytes is a binary image
-    im_file = BytesIO(im_bytes)  # convert image to file-like object
-    user_image = Image.open(im_file)
-
+    user_image = decode_base64_image(base_request.encoded_image)
     user_image_path = "user_image.png"
     user_image.save(user_image_path)
 
