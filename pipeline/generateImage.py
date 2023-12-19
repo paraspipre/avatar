@@ -136,13 +136,14 @@ def generateVideo(base_request,req_id):
     pipe.enable_model_cpu_offload()
 
     output = pipe(
-        prompt=(
-            "masterpiece, bestquality, highlydetailed, ultradetailed, sunset, "
-            "orange sky, warm lighting, fishing boats, ocean waves seagulls, "
-            "rippling water, wharf, silhouette, serene atmosphere, dusk, evening glow, "
-            "golden hour, coastal landscape, seaside scenery"
-        ),
-        negative_prompt="bad quality, worse quality",
+        # prompt=(
+        #     "masterpiece, bestquality, highlydetailed, ultradetailed, sunset, "
+        #     "orange sky, warm lighting, fishing boats, ocean waves seagulls, "
+        #     "rippling water, wharf, silhouette, serene atmosphere, dusk, evening glow, "
+        #     "golden hour, coastal landscape, seaside scenery"
+        # ),
+        prompt=base_request.prompt,
+        negative_prompt=base_request.negative_prompt,
         num_frames=16,
         guidance_scale=7.5,
         num_inference_steps=25,
@@ -158,11 +159,11 @@ def generateVideo(base_request,req_id):
     # roop_image_path = get_roop_enhanced_image(user_image_path, final_image_path)
     # print("roopdone")
     # return roop_image_path
-    # generated_image_encoded = encode_image(final_image_path)
+    generated_image_encoded = encode_image("animation.gif")
     # once get it encoded, delete the file
    #  delete_image_file(final_image_path)
-    # return generated_image_encoded
-    return "okay"
+    return generated_image_encoded
+    # return "okay"
 
 def generateLogo(base_request,req_id):
     # Load the pipeline based on the model path in the request
