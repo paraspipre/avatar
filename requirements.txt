@@ -15,3 +15,6 @@ customtkinter
 tkinterdnd2
 insightface
 opennsfw2
+
+
+controlnet-aux
