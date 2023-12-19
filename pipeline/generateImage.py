@@ -168,9 +168,11 @@ def generateVideo(base_request,req_id):
     # return "okay"
 
 def generateCanny(base_request,req_id):
-    original_image = load_image(
-        "https://huggingface.co/datasets/hf-internal-testing/diffusers-images/resolve/main/sd_controlnet/hf-logo.png"
-    )
+    user_image = decode_base64_image(base_request.encoded_image)
+    user_image_path = "user_image.png"
+    user_image.save(user_image_path)
+
+    original_image = load_image("user_image.png")
 
     image = np.array(original_image)
 
