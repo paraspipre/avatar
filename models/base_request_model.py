@@ -15,8 +15,8 @@ class BaseSDRequest(BaseModel):
 class BaseSDRequestRoop(BaseModel):
     prompt: str ="superman"
     encoded_image: str
-    height: int = 512
-    width: int=512
+    height: int = 1024
+    width: int=1024
     negative_prompt: str = "deformed, blurr"
     base_model:str = "Yntec/epiCPhotoGasm"
     num_inference_steps: int = 30
