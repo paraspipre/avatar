@@ -113,7 +113,6 @@ def generateImage(base_request,req_id):
                                ).images[0]
     final_image_path = "output.png" + req_id + ".png"
     image.save(final_image_path)
-    image.save("output_preview.png" + req_id + ".png")
     # print("roopstart")
     # roop_image_path = get_roop_enhanced_image(user_image_path, final_image_path)
     # print("roopdone")

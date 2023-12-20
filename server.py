@@ -138,4 +138,4 @@ if __name__ == "__main__":
 
 # Update any base URLs to use the public ngrok URL
    os.environ["BASE_URL"] = public_url
-   uvicorn.run(app,host="0.0.0.0",port=8000)
+   uvicorn.run(app,host="127.0.0.1",port=8000,workers=5)

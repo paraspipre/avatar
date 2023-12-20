@@ -7,8 +7,8 @@ class BaseSDRequest(BaseModel):
     # encoded_image: str
     height: int = 512
     width: int=512
-    negative_prompt: str = "deformed, nsfw, blurr"
-    base_model:str = "stabilityai/stable-diffusion-xl-base-1.0"
+    negative_prompt: str = "deformed, blurr"
+    base_model:str = "Lykon/DreamShaper"
     num_inference_steps: int = 30
     guidance_scale:float = 7.5
     num_images_per_prompt:int = 1
