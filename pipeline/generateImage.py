@@ -119,6 +119,65 @@ def generateImage(base_request,req_id):
    #  delete_image_file(final_image_path)
     return generated_image_encoded
 
+def generateRoop(base_request,req_id):
+    print(base_request)
+    model = AutoPipelineForText2Image.from_pretrained(
+        base_request.base_model,
+        torch_dtype=d_type, variant="fp16", use_safetensors=True
+    ).to(device)
+
+    # model.load_lora_weights("/content/drive/MyDrive/Harrlogos_v2.0.safetensors", weight_name="Harrlogos_v2.0.safetensors")
+    # state_dict, network_alphas = model.lora_state_dict(
+    # "/content/drive/MyDrive/Harrlogos_v2.0.safetensors",
+    # unet_config=model.unet.config,
+    # torch_dtype=d_type, variant="fp16", use_safetensors=True,ignore_mismatched_sizes=True
+    # )
+    # model.load_lora_into_unet(
+    # state_dict,
+    # network_alphas=network_alphas,
+    # unet=model.unet,
+    # low_cpu_mem_usage=False,
+    # # ignore_mismatched_sizes=True
+    # )
+
+    # Decode the base64-encoded image
+   #  control_net_image = decode_base64_image(base_request.encoded_control_net_image)
+   #  control_image = CONTROLNET_MAPPING[base_request.control_type]["hinter"](control_net_image)
+
+    # sd_pipe.height = base_request.height
+    # sd_pipe.width = base_request.width
+    # sd_pipe.image = control_image
+    # sd_pipe.num_images_per_prompt = 1
+    # sd_pipe.guidance_scale = base_request.guidance_scale
+    # sd_pipe.controlnet_conditioning_scale = base_request.controlnet_conditioning_scale
+    # sd_pipe.num_inference_steps = base_request.num_inference_steps
+
+    user_image = decode_base64_image(base_request.encoded_image)
+    user_image_path = "user_image" + req_id + ".png"
+    user_image.save(user_image_path)
+
+    import random
+    random_seed = random.randint(1, 1000000)
+
+    image = model(prompt=base_request.prompt,
+                  negative_prompt=base_request.negative_prompt,
+                  seed=random_seed,
+                               width=base_request.width,
+                               height=base_request.height,
+                               num_samples=1,
+                               ).images[0]
+    final_image_path = "output" + req_id + ".png"
+    image.save(final_image_path)
+    # print("roopstart")
+    roop_image_path = get_roop_enhanced_image(user_image_path, final_image_path,req_id)
+    # print("roopdone")
+    # return roop_image_path
+    generated_image_encoded = encode_image(roop_image_path)
+    # once get it encoded, delete the file
+   #  delete_image_file(final_image_path)
+    return generated_image_encoded
+
+
 def generateVideo(base_request,req_id):
 
     # Load the motion adapter
@@ -327,22 +386,23 @@ def generateLogo(base_request,req_id):
     return generated_image_encoded
 
 
-def get_roop_enhanced_image(user_image_path, generated_image_path):
-    roop_image_path = "output_roop.png"
+def get_roop_enhanced_image(user_image_path, generated_image_path,req_id):
+    roop_image_path = "output_roop" + req_id+ ".png"
 
     try:
         command = "cd ./roop && python run.py -s ../{} -t ../{} -o ../{}".format(user_image_path, generated_image_path, roop_image_path)
         subprocess.run(command, shell=True, check=True)
     except subprocess.CalledProcessError as e:
         # Reset the working directory to the original directory
-        os.chdir(os.path.dirname(__file__))
+        # os.chdir(os.path.dirname(__file__))
 
         # Raise a ValueError if the subprocess fails
         raise ValueError(f"Roop enhancement failed: {e}")
 
     finally:
         # Reset the working directory to the original directory (in case of an exception)
-        os.chdir(os.path.dirname(__file__))
+        # os.chdir(os.path.dirname(__file__))
+        pass
         
     return roop_image_path
 

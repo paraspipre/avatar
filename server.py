@@ -22,14 +22,14 @@ app.add_middleware(
 
 @app.get("/check")
 async def check():
-   return "server is running"
+   return True
 
 @app.post("/generateImage")
 async def generate_image(base_request: BaseSDRequest):
     try:
         req_id = datetime.now().strftime("%Y%m%d%H%M%S")
 
-        generated_image_encoded = generateImage(base_request, req_id)
+        generated_image_encoded = generateRoop(base_request, req_id)
 
         return {
             "prompt": base_request.prompt,
