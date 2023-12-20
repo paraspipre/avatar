@@ -62,10 +62,6 @@ model = None
 
 
 def generateImage(base_request,req_id):
-    # Load the pipeline based on the model path in the request
-   #  load_pipeline(base_request.base_model)
-    print(base_request)
-    current_model_path =base_request.base_model
     model = AutoPipelineForText2Image.from_pretrained(
         base_request.base_model,
         torch_dtype=d_type, variant="fp16", use_safetensors=True
