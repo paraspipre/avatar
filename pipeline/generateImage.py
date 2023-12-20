@@ -65,7 +65,7 @@ def generateImage(base_request,req_id):
     print(base_request)
     model = AutoPipelineForText2Image.from_pretrained(
         base_request.base_model,
-        torch_dtype=d_type, variant="fp16", use_safetensors=True
+        torch_dtype=d_type, use_safetensors=True
     ).to(device)
 
     # model.load_lora_weights("/content/drive/MyDrive/Harrlogos_v2.0.safetensors", weight_name="Harrlogos_v2.0.safetensors")
