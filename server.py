@@ -1,8 +1,8 @@
 import os
 from fastapi import FastAPI, HTTPException
 import uvicorn
-from models.base_request_model import BaseSDRequest, BaseSDRequestVideo, BaseSDRequestLogo, BaseSDRequestCanny,BaseSDRequestOpenpose
-from pipeline.generateImage import generateImage,generateLogo, generateOpenpose,generateVideo, generateCanny
+from models.base_request_model import BaseSDRequest, BaseSDRequestVideo, BaseSDRequestLogo, BaseSDRequestCanny,BaseSDRequestOpenpose,BaseSDRequestRoop
+from pipeline.generateImage import generateImage,generateLogo, generateOpenpose,generateVideo, generateCanny,generateRoop
 from datetime import datetime
 from pyngrok import ngrok
 from fastapi.middleware.cors import CORSMiddleware
@@ -29,7 +29,7 @@ async def generate_image(base_request: BaseSDRequest):
     try:
         req_id = datetime.now().strftime("%Y%m%d%H%M%S")
 
-        generated_image_encoded = generateRoop(base_request, req_id)
+        generated_image_encoded = generateImage(base_request, req_id)
 
         return {
             "prompt": base_request.prompt,
@@ -39,13 +39,14 @@ async def generate_image(base_request: BaseSDRequest):
     except Exception as e:
         print(f"Exception occurred with error as {e}")
         raise HTTPException(status_code=500, detail=str(e))
-    
-@app.post("/generateLogo")
-async def generate_logo(base_request: BaseSDRequest):
+
+ 
+@app.post("/generateRoop")
+async def generate_roop(base_request: BaseSDRequestRoop):
     try:
         req_id = datetime.now().strftime("%Y%m%d%H%M%S")
 
-        generated_image_encoded = generateLogo(base_request, req_id)
+        generated_image_encoded = generateRoop(base_request, req_id)
 
         return {
             "prompt": base_request.prompt,
