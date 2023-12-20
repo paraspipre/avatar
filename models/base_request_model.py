@@ -18,7 +18,7 @@ class BaseSDRequestRoop(BaseModel):
     height: int = 512
     width: int=512
     negative_prompt: str = "deformed, blurr"
-    base_model:str = "SG161222/Realistic_Vision_V6.0_B1_noVAE"
+    base_model:str = "Yntec/epiCPhotoGasm"
     num_inference_steps: int = 30
     guidance_scale:float = 7.5
     num_images_per_prompt:int = 1
