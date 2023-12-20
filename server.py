@@ -40,6 +40,23 @@ async def generate_image(base_request: BaseSDRequest):
         print(f"Exception occurred with error as {e}")
         raise HTTPException(status_code=500, detail=str(e))
     
+@app.post("/generateLogo")
+async def generate_logo(base_request: BaseSDRequest):
+    try:
+        req_id = datetime.now().strftime("%Y%m%d%H%M%S")
+
+        generated_image_encoded = generateLogo(base_request, req_id)
+
+        return {
+            "prompt": base_request.prompt,
+            "generated_image_encoded": generated_image_encoded
+        }
+
+    except Exception as e:
+        print(f"Exception occurred with error as {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+    
 @app.post("/generateVideo")
 async def generate_video(base_request: BaseSDRequestVideo):
     try:

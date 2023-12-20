@@ -71,7 +71,7 @@ def generateImage(base_request,req_id):
         torch_dtype=d_type, variant="fp16", use_safetensors=True
     ).to(device)
 
-    model.load_lora_weights("/content/drive/MyDrive/Harrlogos_v2.0.safetensors", weight_name="Harrlogos_v2.0.safetensors")
+    # model.load_lora_weights("/content/drive/MyDrive/Harrlogos_v2.0.safetensors", weight_name="Harrlogos_v2.0.safetensors")
     # state_dict, network_alphas = model.lora_state_dict(
     # "/content/drive/MyDrive/Harrlogos_v2.0.safetensors",
     # unet_config=model.unet.config,
@@ -97,9 +97,9 @@ def generateImage(base_request,req_id):
     # sd_pipe.controlnet_conditioning_scale = base_request.controlnet_conditioning_scale
     # sd_pipe.num_inference_steps = base_request.num_inference_steps
 
-    user_image = decode_base64_image(base_request.encoded_image)
-    user_image_path = "user_image.png"
-    user_image.save(user_image_path)
+    # user_image = decode_base64_image(base_request.encoded_image)
+    # user_image_path = "user_image.png"
+    # user_image.save(user_image_path)
 
     import random
     random_seed = random.randint(1, 1000000)
@@ -111,9 +111,9 @@ def generateImage(base_request,req_id):
                                height=base_request.height,
                                num_samples=1,
                                ).images[0]
-    final_image_path = "output.png"
+    final_image_path = "output.png" + req_id + ".png"
     image.save(final_image_path)
-    image.save("output_preview.png")
+    image.save("output_preview.png" + req_id + ".png")
     # print("roopstart")
     # roop_image_path = get_roop_enhanced_image(user_image_path, final_image_path)
     # print("roopdone")
@@ -305,7 +305,7 @@ def generateLogo(base_request,req_id):
     # sd_pipe.num_inference_steps = base_request.num_inference_steps
 
     user_image = decode_base64_image(base_request.encoded_image)
-    user_image_path = "user_image.png"
+    user_image_path = "user_image" + req_id + ".png"
     user_image.save(user_image_path)
 
     import random
@@ -318,9 +318,9 @@ def generateLogo(base_request,req_id):
                                height=base_request.height,
                                num_samples=1,
                                ).images[0]
-    final_image_path = "output.png"
+    final_image_path = "output.png" + req_id + ".png"
     image.save(final_image_path)
-    image.save("output_preview.png")
+    image.save("output_preview" + req_id + ".png")
     # print("roopstart")
     # roop_image_path = get_roop_enhanced_image(user_image_path, final_image_path)
     # print("roopdone")
