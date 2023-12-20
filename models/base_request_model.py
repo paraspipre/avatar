@@ -8,7 +8,7 @@ class BaseSDRequest(BaseModel):
     height: int = 512
     width: int=512
     negative_prompt: str = "deformed, blurr"
-    base_model:str = "Lykon/DreamShaper"
+    base_model:str = "lykon/dreamshaper-7"
     num_inference_steps: int = 30
     guidance_scale:float = 7.5
     num_images_per_prompt:int = 1
