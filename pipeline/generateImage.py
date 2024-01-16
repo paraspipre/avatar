@@ -1,6 +1,6 @@
 # set up
 import torch
-from diffusers import AutoPipelineForText2Image, MotionAdapter, AnimateDiffPipeline, DDIMScheduler,StableDiffusionXLControlNetPipeline, ControlNetModel, AutoencoderKL,StableDiffusionControlNetPipeline,UniPCMultistepScheduler
+from diffusers import StableDiffusionXLImg2ImgPipeline, AutoPipelineForText2Image, MotionAdapter, AnimateDiffPipeline, DDIMScheduler,StableDiffusionXLControlNetPipeline, ControlNetModel, AutoencoderKL,StableDiffusionControlNetPipeline,UniPCMultistepScheduler,StableDiffusionXLPipeline
 from diffusers.utils import export_to_gif,load_image, make_image_grid
 from PIL import Image
 import cv2
@@ -126,6 +126,7 @@ def generateRoop(base_request,req_id):
         torch_dtype=d_type, variant="fp16", use_safetensors=True
     ).to(device)
 
+
     # model.load_lora_weights("/content/drive/MyDrive/Harrlogos_v2.0.safetensors", weight_name="Harrlogos_v2.0.safetensors")
     # state_dict, network_alphas = model.lora_state_dict(
     # "/content/drive/MyDrive/Harrlogos_v2.0.safetensors",
@@ -174,7 +175,9 @@ def generateRoop(base_request,req_id):
     # return roop_image_path
     generated_image_encoded = encode_image(roop_image_path)
     # once get it encoded, delete the file
-   #  delete_image_file(final_image_path)
+    # delete_image_file(final_image_path)
+    # delete_image_file(user_image_path)
+    # delete_image_file(final_image_path)
     return generated_image_encoded
 
 
@@ -380,6 +383,7 @@ def generateLogo(base_request,req_id):
     # roop_image_path = get_roop_enhanced_image(user_image_path, final_image_path)
     # print("roopdone")
     # return roop_image_path
+    subprocess.run("pwd", shell=True, check=True)
     generated_image_encoded = encode_image(final_image_path)
     # once get it encoded, delete the file
    #  delete_image_file(final_image_path)
@@ -390,18 +394,22 @@ def get_roop_enhanced_image(user_image_path, generated_image_path,req_id):
     roop_image_path = "output_roop" + req_id+ ".png"
 
     try:
+        subprocess.run("pwd", shell=True, check=True)
         command = "cd ./roop && python run.py -s ../{} -t ../{} -o ../{}".format(user_image_path, generated_image_path, roop_image_path)
         subprocess.run(command, shell=True, check=True)
+        subprocess.run("pwd", shell=True, check=True)
     except subprocess.CalledProcessError as e:
         # Reset the working directory to the original directory
-        # os.chdir(os.path.dirname(__file__))
+        subprocess.run("pwd", shell=True, check=True)
+        os.chdir(os.path.dirname(__file__))
+        subprocess.run("pwd", shell=True, check=True)
 
         # Raise a ValueError if the subprocess fails
         raise ValueError(f"Roop enhancement failed: {e}")
 
     finally:
         # Reset the working directory to the original directory (in case of an exception)
-        # os.chdir(os.path.dirname(__file__))
+        os.chdir(os.path.dirname(__file__))
         pass
         
     return roop_image_path
