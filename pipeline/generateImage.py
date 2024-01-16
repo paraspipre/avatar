@@ -187,7 +187,7 @@ def get_roop_enhanced_image(user_image_path, generated_image_path,req_id):
 
     try:
         subprocess.run("pwd", shell=True, check=True)
-        command = "cd {} && python run.py -s ../{} -t ../{} -o ../{}".format("./facefusion",user_image_path, generated_image_path, roop_image_path)
+        command = "cd . {} && python run.py -s ../{} -t ../{} -o ../{}".format("./facefusion",user_image_path, generated_image_path, roop_image_path)
         subprocess.run(command, shell=True, check=True)
     except subprocess.CalledProcessError as e:
         # Reset the working directory to the original directory
