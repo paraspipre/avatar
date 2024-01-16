@@ -136,7 +136,4 @@ if __name__ == "__main__":
    port=8000
    public_url = ngrok.connect(port).public_url
    print(" * ngrok tunnel \"{}\" -> \"http://127.0.0.1:{}\"".format(public_url, port))
-
-# Update any base URLs to use the public ngrok URL
-   os.environ["BASE_URL"] = public_url
    uvicorn.run(app,host="0.0.0.0",port=8000)
