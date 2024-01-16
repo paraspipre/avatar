@@ -5,6 +5,7 @@ from diffusers.utils import export_to_gif,load_image, make_image_grid
 from PIL import Image
 import cv2
 import numpy as np
+from compel import Compel, ReturnedEmbeddingsType
 
 from controlnet_aux import OpenposeDetector
 
@@ -120,14 +121,13 @@ def generateImage(base_request,req_id):
     return generated_image_encoded
 
 def generateRoop(base_request,req_id):
-    compel = Compel(tokenizer=pipeline.tokenizer, text_encoder=pipeline.text_encoder)
-    # print(base_request)
-    model = AutoPipelineForText2Image.from_pretrained(
+# print(base_request)
+    pipeline = AutoPipelineForText2Image.from_pretrained(
         base_request.base_model,
         torch_dtype=d_type, variant="fp16", use_safetensors=True
     ).to(device)
-    conditioning = compel.build_conditioning_tensor(base_request.prompt)
-
+    compel = Compel(tokenizer=[pipeline.tokenizer, pipeline.tokenizer_2] , text_encoder=[pipeline.text_encoder, pipeline.text_encoder_2], returned_embeddings_type=ReturnedEmbeddingsType.PENULTIMATE_HIDDEN_STATES_NON_NORMALIZED, requires_pooled=[False, True])
+    conditioning, pooled = compel(prompt)
 
     # model.load_lora_weights("/content/drive/MyDrive/Harrlogos_v2.0.safetensors", weight_name="Harrlogos_v2.0.safetensors")
     # state_dict, network_alphas = model.lora_state_dict(
@@ -162,7 +162,7 @@ def generateRoop(base_request,req_id):
     import random
     random_seed = random.randint(1, 1000000)
 
-    image = model(prompt_embeds=conditioning,
+    image = pipeline(prompt_embeds=conditioning,
                   negative_prompt=base_request.negative_prompt,
                   seed=random_seed,
                                width=base_request.width,
