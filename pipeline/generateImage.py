@@ -127,8 +127,8 @@ def generateRoop(base_request,req_id):
         torch_dtype=d_type, variant="fp16", use_safetensors=True
     ).to(device)
     compel = Compel(tokenizer=[pipeline.tokenizer, pipeline.tokenizer_2] , text_encoder=[pipeline.text_encoder, pipeline.text_encoder_2], returned_embeddings_type=ReturnedEmbeddingsType.PENULTIMATE_HIDDEN_STATES_NON_NORMALIZED, requires_pooled=[False, True])
-    conditioning, pooled = compel(prompt)
-
+    conditioning, pooled = compel(base_request.prompt)
+    pipeline.enable_sequential_cpu_offloading()
     # model.load_lora_weights("/content/drive/MyDrive/Harrlogos_v2.0.safetensors", weight_name="Harrlogos_v2.0.safetensors")
     # state_dict, network_alphas = model.lora_state_dict(
     # "/content/drive/MyDrive/Harrlogos_v2.0.safetensors",
@@ -162,7 +162,8 @@ def generateRoop(base_request,req_id):
     import random
     random_seed = random.randint(1, 1000000)
 
-    image = pipeline(prompt_embeds=conditioning, pooled_prompt_embeds=pooled
+    image = pipeline(prompt_embeds=conditioning, 
+                     pooled_prompt_embeds=pooled,
                   negative_prompt=base_request.negative_prompt,
                   seed=random_seed,
                                width=base_request.width,
