@@ -120,11 +120,13 @@ def generateImage(base_request,req_id):
     return generated_image_encoded
 
 def generateRoop(base_request,req_id):
+    compel = Compel(tokenizer=pipeline.tokenizer, text_encoder=pipeline.text_encoder)
     # print(base_request)
     model = AutoPipelineForText2Image.from_pretrained(
         base_request.base_model,
         torch_dtype=d_type, variant="fp16", use_safetensors=True
     ).to(device)
+    conditioning = compel.build_conditioning_tensor(base_request.prompt)
 
 
     # model.load_lora_weights("/content/drive/MyDrive/Harrlogos_v2.0.safetensors", weight_name="Harrlogos_v2.0.safetensors")
@@ -160,7 +162,7 @@ def generateRoop(base_request,req_id):
     import random
     random_seed = random.randint(1, 1000000)
 
-    image = model(prompt=base_request.prompt,
+    image = model(prompt_embeds=conditioning,
                   negative_prompt=base_request.negative_prompt,
                   seed=random_seed,
                                width=base_request.width,
@@ -395,7 +397,7 @@ def get_roop_enhanced_image(user_image_path, generated_image_path,req_id):
 
     try:
         subprocess.run("pwd", shell=True, check=True)
-        command = "cd ./nsfw-roop && python run.py -s ../{} -t ../{} -o ../{}".format(user_image_path, generated_image_path, roop_image_path)
+        command = "cd /kaggle/working/nsfw-roop && python run.py -s ../{} -t ../{} -o ../{}".format(user_image_path, generated_image_path, roop_image_path)
         subprocess.run(command, shell=True, check=True)
         subprocess.run("pwd", shell=True, check=True)
     except subprocess.CalledProcessError as e:

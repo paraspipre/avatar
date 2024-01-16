@@ -8,6 +8,7 @@ python-dotenv
 controlnet_hinter==0.0.5
 pyngrok
 accelerate
+compel
 
 # roop dependencies
 onnxruntime-gpu==1.15.1
