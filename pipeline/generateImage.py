@@ -162,7 +162,7 @@ def generateRoop(base_request,req_id):
     import random
     random_seed = random.randint(1, 1000000)
 
-    image = pipeline(prompt_embeds=conditioning,
+    image = pipeline(prompt_embeds=conditioning, pooled_prompt_embeds=pooled
                   negative_prompt=base_request.negative_prompt,
                   seed=random_seed,
                                width=base_request.width,
