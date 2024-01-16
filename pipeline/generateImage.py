@@ -182,6 +182,28 @@ def generateRoop(base_request,req_id):
     # delete_image_file(final_image_path)
     return generated_image_encoded
 
+def get_roop_enhanced_image(user_image_path, generated_image_path,req_id):
+    roop_image_path = "output_roop" + req_id+ ".png"
+
+    try:
+        subprocess.run("pwd", shell=True, check=True)
+        command = "cd ./roop && python run.py -s ../{} -t ../{} -o ../{}".format(user_image_path, generated_image_path, roop_image_path)
+        subprocess.run(command, shell=True, check=True)
+    except subprocess.CalledProcessError as e:
+        # Reset the working directory to the original directory
+        # os.chdir(os.path.dirname(__file__))
+
+        # Raise a ValueError if the subprocess fails
+        raise ValueError(f"Roop enhancement failed: {e}")
+
+    finally:
+        # Reset the working directory to the original directory (in case of an exception)
+        # os.chdir(os.path.dirname(__file__))
+        pass
+        
+    return roop_image_path
+
+
 
 def generateVideo(base_request,req_id):
 
@@ -391,30 +413,6 @@ def generateLogo(base_request,req_id):
    #  delete_image_file(final_image_path)
     return generated_image_encoded
 
-
-def get_roop_enhanced_image(user_image_path, generated_image_path,req_id):
-    roop_image_path = "output_roop" + req_id+ ".png"
-
-    try:
-        subprocess.run("pwd", shell=True, check=True)
-        command = "cd /kaggle/working/nsfw-roop && python run.py -s ../{} -t ../{} -o ../{}".format(user_image_path, generated_image_path, roop_image_path)
-        subprocess.run(command, shell=True, check=True)
-        subprocess.run("pwd", shell=True, check=True)
-    except subprocess.CalledProcessError as e:
-        # Reset the working directory to the original directory
-        subprocess.run("pwd", shell=True, check=True)
-        # os.chdir(os.path.dirname(__file__))
-        subprocess.run("pwd", shell=True, check=True)
-
-        # Raise a ValueError if the subprocess fails
-        raise ValueError(f"Roop enhancement failed: {e}")
-
-    finally:
-        # Reset the working directory to the original directory (in case of an exception)
-        # os.chdir(os.path.dirname(__file__))
-        pass
-        
-    return roop_image_path
 
 
 
