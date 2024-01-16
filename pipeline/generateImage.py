@@ -128,7 +128,6 @@ def generateRoop(base_request,req_id):
     ).to(device)
     compel = Compel(tokenizer=[pipeline.tokenizer, pipeline.tokenizer_2] , text_encoder=[pipeline.text_encoder, pipeline.text_encoder_2], returned_embeddings_type=ReturnedEmbeddingsType.PENULTIMATE_HIDDEN_STATES_NON_NORMALIZED, requires_pooled=[False, True])
     conditioning, pooled = compel(base_request.prompt)
-    pipeline.enable_sequential_cpu_offloading()
     # model.load_lora_weights("/content/drive/MyDrive/Harrlogos_v2.0.safetensors", weight_name="Harrlogos_v2.0.safetensors")
     # state_dict, network_alphas = model.lora_state_dict(
     # "/content/drive/MyDrive/Harrlogos_v2.0.safetensors",
