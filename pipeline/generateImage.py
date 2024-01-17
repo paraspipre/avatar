@@ -130,7 +130,7 @@ def generateRoop(base_request,req_id):
     conditioning = compel.build_conditioning_tensor(base_request.prompt)
 
 
-    # upscaler = StableDiffusionLatentUpscalePipeline.from_pretrained("stabilityai/sd-x2-latent-upscaler", torch_dtype=torch.float16).to("cuda")
+    upscaler = StableDiffusionLatentUpscalePipeline.from_pretrained("stabilityai/stable-diffusion-x4-upscaler", torch_dtype=torch.float16).to("cuda")
 
 
     user_image = decode_base64_image(base_request.encoded_image)
@@ -146,10 +146,13 @@ def generateRoop(base_request,req_id):
                                width=base_request.width,
                                height=base_request.height,
                                num_samples=1,
-                            #    output_type="latent"
+                               output_type="latent"
                                ).images[0]
+    
+    
+    upscaled_image = pipeline(prompt_embeds=conditioning, image=image).images[0]
     final_image_path = "output" + req_id + ".png"
-    image.save(final_image_path)
+    upscaled_image.save(final_image_path)
     # print("roopstart")
     roop_image_path = get_roop_enhanced_image(user_image_path, final_image_path,req_id)
     # print("roopdone")

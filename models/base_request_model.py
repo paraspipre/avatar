@@ -15,8 +15,8 @@ class BaseSDRequest(BaseModel):
 class BaseSDRequestRoop(BaseModel):
     prompt: str ="superman"
     encoded_image: str
-    height: int = 1024
-    width: int=1024
+    height: int = 512
+    width: int=512
     negative_prompt: str = "deformed, blurr"
     base_model:str = "JoPmt/Txt2Img_Jggrnt_XL_V7_Pipe"
     num_inference_steps: int = 30
