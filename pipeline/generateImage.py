@@ -126,9 +126,9 @@ def generateRoop(base_request,req_id):
         base_request.base_model,
         torch_dtype=d_type, variant="fp16", use_safetensors=True
     ).to(device)
-    compel = Compel(tokenizer=[pipeline.tokenizer, pipeline.tokenizer_2] , text_encoder=[pipeline.text_encoder, pipeline.text_encoder_2], returned_embeddings_type=ReturnedEmbeddingsType.PENULTIMATE_HIDDEN_STATES_NON_NORMALIZED, requires_pooled=[False, True])
-    conditioning, pooled = compel(base_request.prompt)
-   
+    compel = Compel(tokenizer=pipeline.tokenizer, text_encoder=pipeline.text_encoder)
+    conditioning = compel.build_conditioning_tensor(base_request.prompt)
+
 
     # upscaler = StableDiffusionLatentUpscalePipeline.from_pretrained("stabilityai/sd-x2-latent-upscaler", torch_dtype=torch.float16).to("cuda")
 
@@ -141,7 +141,6 @@ def generateRoop(base_request,req_id):
     random_seed = random.randint(1, 1000000)
 
     image = pipeline(prompt_embeds=conditioning, 
-                     pooled_prompt_embeds=pooled,
                   negative_prompt=base_request.negative_prompt,
                   seed=random_seed,
                                width=base_request.width,
