@@ -1,6 +1,6 @@
 # set up
 import torch
-from diffusers import StableDiffusionXLImg2ImgPipeline, AutoPipelineForText2Image, MotionAdapter, AnimateDiffPipeline, DDIMScheduler,StableDiffusionXLControlNetPipeline, ControlNetModel, AutoencoderKL,StableDiffusionControlNetPipeline,UniPCMultistepScheduler,StableDiffusionXLPipeline
+from diffusers import StableDiffusionLatentUpscalePipeline, StableDiffusionXLImg2ImgPipeline, AutoPipelineForText2Image, MotionAdapter, AnimateDiffPipeline, DDIMScheduler,StableDiffusionXLControlNetPipeline, ControlNetModel, AutoencoderKL,StableDiffusionControlNetPipeline,UniPCMultistepScheduler,StableDiffusionXLPipeline
 from diffusers.utils import export_to_gif,load_image, make_image_grid
 from PIL import Image
 import cv2
@@ -128,31 +128,10 @@ def generateRoop(base_request,req_id):
     ).to(device)
     compel = Compel(tokenizer=[pipeline.tokenizer, pipeline.tokenizer_2] , text_encoder=[pipeline.text_encoder, pipeline.text_encoder_2], returned_embeddings_type=ReturnedEmbeddingsType.PENULTIMATE_HIDDEN_STATES_NON_NORMALIZED, requires_pooled=[False, True])
     conditioning, pooled = compel(base_request.prompt)
-    # model.load_lora_weights("/content/drive/MyDrive/Harrlogos_v2.0.safetensors", weight_name="Harrlogos_v2.0.safetensors")
-    # state_dict, network_alphas = model.lora_state_dict(
-    # "/content/drive/MyDrive/Harrlogos_v2.0.safetensors",
-    # unet_config=model.unet.config,
-    # torch_dtype=d_type, variant="fp16", use_safetensors=True,ignore_mismatched_sizes=True
-    # )
-    # model.load_lora_into_unet(
-    # state_dict,
-    # network_alphas=network_alphas,
-    # unet=model.unet,
-    # low_cpu_mem_usage=False,
-    # # ignore_mismatched_sizes=True
-    # )
+   
 
-    # Decode the base64-encoded image
-   #  control_net_image = decode_base64_image(base_request.encoded_control_net_image)
-   #  control_image = CONTROLNET_MAPPING[base_request.control_type]["hinter"](control_net_image)
+    # upscaler = StableDiffusionLatentUpscalePipeline.from_pretrained("stabilityai/sd-x2-latent-upscaler", torch_dtype=torch.float16).to("cuda")
 
-    # sd_pipe.height = base_request.height
-    # sd_pipe.width = base_request.width
-    # sd_pipe.image = control_image
-    # sd_pipe.num_images_per_prompt = 1
-    # sd_pipe.guidance_scale = base_request.guidance_scale
-    # sd_pipe.controlnet_conditioning_scale = base_request.controlnet_conditioning_scale
-    # sd_pipe.num_inference_steps = base_request.num_inference_steps
 
     user_image = decode_base64_image(base_request.encoded_image)
     user_image_path = "user_image" + req_id + ".png"
@@ -168,6 +147,7 @@ def generateRoop(base_request,req_id):
                                width=base_request.width,
                                height=base_request.height,
                                num_samples=1,
+                            #    output_type="latent"
                                ).images[0]
     final_image_path = "output" + req_id + ".png"
     image.save(final_image_path)
@@ -187,7 +167,7 @@ def get_roop_enhanced_image(user_image_path, generated_image_path,req_id):
 
     try:
         subprocess.run("pwd", shell=True, check=True)
-        command = "cd {} && python run.py -s ../{} -t ../{} -o ../{}".format("./facefusion",user_image_path, generated_image_path, roop_image_path)
+        command = "cd {} && python run.py -s ../{} -t ../{} -o ../{}".format("./roop",user_image_path, generated_image_path, roop_image_path)
         subprocess.run(command, shell=True, check=True)
     except subprocess.CalledProcessError as e:
         # Reset the working directory to the original directory
