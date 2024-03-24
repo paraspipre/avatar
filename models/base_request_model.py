@@ -18,7 +18,7 @@ class BaseSDRequestRoop(BaseModel):
     height: int = 512
     width: int=512
     negative_prompt: str = "deformed, blurr"
-    base_model:str = "JoPmt/Txt2Img_Jggrnt_XL_V7_Pipe"
+    base_model:str = "lykon/dreamshaper-7"
     num_inference_steps: int = 30
     guidance_scale:float = 7.5
     num_images_per_prompt:int = 1
