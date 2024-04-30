@@ -1,11 +1,11 @@
 import os
 from fastapi import FastAPI, HTTPException
 import uvicorn
+from pyngrok import ngrok
+from fastapi.middleware.cors import CORSMiddleware
 from models.base_request_model import BaseSDRequest, BaseSDRequestVideo, BaseSDRequestLogo, BaseSDRequestCanny,BaseSDRequestOpenpose,BaseSDRequestRoop
 from pipeline.generateImage import generateImage,generateLogo, generateOpenpose,generateVideo, generateCanny,generateRoop
 from datetime import datetime
-from pyngrok import ngrok
-from fastapi.middleware.cors import CORSMiddleware
 
 
 app = FastAPI()
@@ -28,8 +28,14 @@ async def check():
 async def generate_image(base_request: BaseSDRequest):
     try:
         req_id = datetime.now().strftime("%Y%m%d%H%M%S")
-
-        generated_image_encoded = generateImage(base_request, req_id)
+        print(base_request.path)
+        generated_image_encoded
+        if base_request.path == "/text-image":
+            generated_image_encoded = generateImage(base_request, req_id)
+        elif base_request.path == "/text-logo":
+            generated_image_encoded = generateLogo(base_request, req_id)
+        elif base_request.path == "/text-video":
+            generated_image_encoded = generateVideo(base_request, req_id)
 
         return {
             "prompt": base_request.prompt,

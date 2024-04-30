@@ -185,6 +185,27 @@ def get_roop_enhanced_image(user_image_path, generated_image_path,req_id):
         
     return roop_image_path
 
+def get_roop_enhanced_video(user_image_path, generated_image_path,req_id):
+    roop_image_path = "output_roop" + req_id+ ".gif"
+
+    try:
+        subprocess.run("pwd", shell=True, check=True)
+        command = "cd {} && python run.py -s ../{} -t ../{} -o ../{}".format("./roop",user_image_path, generated_image_path, roop_image_path)
+        subprocess.run(command, shell=True, check=True)
+    except subprocess.CalledProcessError as e:
+        # Reset the working directory to the original directory
+        # os.chdir(os.path.dirname(__file__))
+
+        # Raise a ValueError if the subprocess fails
+        raise ValueError(f"Roop enhancement failed: {e}")
+
+    finally:
+        # Reset the working directory to the original directory (in case of an exception)
+        # os.chdir(os.path.dirname(__file__))
+        pass
+        
+    return roop_image_path
+
 
 
 def generateVideo(base_request,req_id):
@@ -224,7 +245,7 @@ def generateVideo(base_request,req_id):
     # image.save(final_image_path)
     # image.save("output_preview.png")
     # print("roopstart")
-    # roop_image_path = get_roop_enhanced_image(user_image_path, final_image_path)
+    roop_image_path = get_roop_enhanced_image(user_image_path, "animation.gif")
     # print("roopdone")
     # return roop_image_path
     generated_image_encoded = encode_image("animation.gif")
@@ -342,7 +363,7 @@ def generateLogo(base_request,req_id):
         torch_dtype=d_type, variant="fp16", use_safetensors=True
     ).to(device)
 
-    model.load_lora_weights("/content/drive/MyDrive/Harrlogos_v2.0.safetensors", weight_name="Harrlogos_v2.0.safetensors")
+    model.load_lora_weights("/kaggle/input/harrlogos-v2-0-safetensors", weight_name="Harrlogos_v2.0.safetensors")
     # state_dict, network_alphas = model.lora_state_dict(
     # "/content/drive/MyDrive/Harrlogos_v2.0.safetensors",
     # unet_config=model.unet.config,
