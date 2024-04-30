@@ -3,7 +3,7 @@ from fastapi import FastAPI, HTTPException
 import uvicorn
 from pyngrok import ngrok
 from fastapi.middleware.cors import CORSMiddleware
-from models.base_request_model import BaseSDRequest, BaseSDRequestVideo, BaseSDRequestLogo, BaseSDRequestCanny,BaseSDRequestOpenpose,BaseSDRequestRoop
+from models.base_request_model import BaseSDRequestHD, BaseSDRequest, BaseSDRequestVideo, BaseSDRequestLogo, BaseSDRequestCanny,BaseSDRequestOpenpose,BaseSDRequestRoop
 from pipeline.generateImage import generateImage,generateLogo, generateOpenpose,generateVideo, generateCanny,generateRoop
 from datetime import datetime
 
@@ -23,6 +23,23 @@ app.add_middleware(
 @app.get("/check")
 async def check():
    return True
+
+@app.post("/generateImageHritik")
+async def generate_image(base_request: BaseSDRequestHD):
+    try:
+        req_id = datetime.now().strftime("%Y%m%d%H%M%S")
+        print(base_request.path)
+        generated_image_encoded = generateImage(base_request, req_id)
+        
+        return {
+            "prompt": base_request.prompt,
+            "generated_image_encoded": generated_image_encoded
+        }
+
+    except Exception as e:
+        print(f"Exception occurred with error as {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
 
 @app.post("/generateImage")
 async def generate_image(base_request: BaseSDRequest):
