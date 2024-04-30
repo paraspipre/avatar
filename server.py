@@ -28,7 +28,6 @@ async def check():
 async def generate_image(base_request: BaseSDRequestHD):
     try:
         req_id = datetime.now().strftime("%Y%m%d%H%M%S")
-        print(base_request.path)
         generated_image_encoded = generateImage(base_request, req_id)
         
         return {
