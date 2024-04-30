@@ -6,7 +6,8 @@ from fastapi.middleware.cors import CORSMiddleware
 from models.base_request_model import BaseSDRequestHD, BaseSDRequest, BaseSDRequestVideo, BaseSDRequestLogo, BaseSDRequestCanny,BaseSDRequestOpenpose,BaseSDRequestRoop
 from pipeline.generateImage import generateImage,generateLogo, generateOpenpose,generateVideo, generateCanny,generateRoop
 from datetime import datetime
-
+import cloudinary
+import cloudinary.uploader
 
 app = FastAPI()
 
@@ -30,9 +31,25 @@ async def generate_image(base_request: BaseSDRequestHD):
         req_id = datetime.now().strftime("%Y%m%d%H%M%S")
         generated_image_encoded = generateImage(base_request, req_id)
         
+
+        # Set your Cloudinary credentials
+        cloudinary.config( 
+            cloud_name = "dwouepph4", 
+            api_key = "945814147879561", 
+            api_secret = "YJtSjnAwmuni7Rcw25wYiN3pMIs" 
+        )
+
+        # Upload the image
+        uploadStr = 'data:image/jpeg;base64,' + generated_image_encoded;
+        upload_response = cloudinary.uploader.upload(uploadStr)
+
+        # Get the image URL
+        image_url = upload_response["secure_url"]
+
+        # Print the image URL
         return {
             "prompt": base_request.prompt,
-            "generated_image_encoded": generated_image_encoded
+            "generated_image_encoded": image_url
         }
 
     except Exception as e:

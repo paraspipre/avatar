@@ -16,7 +16,7 @@ customtkinter
 tkinterdnd2
 insightface
 opennsfw2
-
+cloudinary
 
 controlnet-aux
 
