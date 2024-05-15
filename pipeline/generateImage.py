@@ -1,7 +1,7 @@
 # set up
 import torch
 from diffusers import StableDiffusionLatentUpscalePipeline, StableDiffusionXLImg2ImgPipeline, AutoPipelineForText2Image, MotionAdapter, AnimateDiffPipeline, DDIMScheduler,StableDiffusionXLControlNetPipeline, ControlNetModel, AutoencoderKL,StableDiffusionControlNetPipeline,UniPCMultistepScheduler,StableDiffusionXLPipeline
-from diffusers.utils import export_to_gif,load_image, make_image_grid
+from diffusers.utils import export_to_video,load_image, make_image_grid
 from PIL import Image
 import cv2
 import numpy as np
@@ -186,7 +186,7 @@ def get_roop_enhanced_image(user_image_path, generated_image_path,req_id):
     return roop_image_path
 
 def get_roop_enhanced_video(user_image_path, generated_image_path,req_id):
-    roop_image_path = "output_roop" + req_id+ ".gif"
+    roop_image_path = "output_roop" + req_id+ ".mp4"
 
     try:
         subprocess.run("pwd", shell=True, check=True)
@@ -243,13 +243,15 @@ def generateVideo(base_request,req_id):
         generator=torch.Generator("cpu").manual_seed(42),
     )
     frames = output.frames[0]
-    export_to_gif(frames, "animation.gif")
+    user_video_path = "user_video" + req_id + ".mp4"
+    export_to_video(frames, user_video_path)
 
     # final_image_path = "output.png"
     # image.save(final_image_path)
     # image.save("output_preview.png")
     # print("roopstart")
-    roop_image_path = get_roop_enhanced_video(user_image_path, "animation.gif",req_id)
+    
+    roop_image_path = get_roop_enhanced_video(user_image_path, user_video_path,req_id)
     # print("roopdone")
     # return roop_image_path
     generated_image_encoded = encode_image(roop_image_path)
