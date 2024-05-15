@@ -224,6 +224,10 @@ def generateVideo(base_request,req_id):
     pipe.enable_vae_slicing()
     pipe.enable_model_cpu_offload()
 
+    user_image = decode_base64_image(base_request.encoded_image)
+    user_image_path = "user_image" + req_id + ".png"
+    user_image.save(user_image_path)
+
     output = pipe(
         # prompt=(
         #     "masterpiece, bestquality, highlydetailed, ultradetailed, sunset, "
@@ -245,10 +249,10 @@ def generateVideo(base_request,req_id):
     # image.save(final_image_path)
     # image.save("output_preview.png")
     # print("roopstart")
-    roop_image_path = get_roop_enhanced_image(user_image_path, "animation.gif")
+    roop_image_path = get_roop_enhanced_video(user_image_path, "animation.gif",req_id)
     # print("roopdone")
     # return roop_image_path
-    generated_image_encoded = encode_image("animation.gif")
+    generated_image_encoded = encode_image(roop_image_path)
     # once get it encoded, delete the file
    #  delete_image_file(final_image_path)
     return generated_image_encoded

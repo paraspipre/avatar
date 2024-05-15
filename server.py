@@ -8,7 +8,7 @@ from pipeline.generateImage import generateImage,generateLogo, generateOpenpose,
 from datetime import datetime
 import cloudinary
 import cloudinary.uploader
-
+import base64
 app = FastAPI()
 
 origins = ["*"]
@@ -105,9 +105,23 @@ async def generate_video(base_request: BaseSDRequestVideo):
 
         generated_image_encoded = generateVideo(base_request, req_id)
 
+        # Set your Cloudinary credentials
+        cloudinary.config( 
+            cloud_name = "dwouepph4", 
+            api_key = "945814147879561", 
+            api_secret = "YJtSjnAwmuni7Rcw25wYiN3pMIs" 
+        )
+
+        # Upload the image
+        uploadStr = 'data:image/gif;base64,' + generated_image_encoded;
+        upload_response = cloudinary.uploader.upload(uploadStr)
+
+        # Get the image URL
+        image_url = upload_response["secure_url"]
+
         return {
             "prompt": base_request.prompt,
-            "generated_image_encoded": generated_image_encoded
+            "generated_image_encoded": image_url
         }
 
     except Exception as e:
