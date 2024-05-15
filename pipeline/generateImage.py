@@ -225,7 +225,7 @@ def generateVideo(base_request,req_id):
     pipe.enable_model_cpu_offload()
 
     user_image = decode_base64_image(base_request.encoded_image)
-    user_image_path = "user_image" + req_id + ".png"
+    user_image_path = "user_image" + req_id + ".jpg"
     user_image.save(user_image_path)
 
     output = pipe(
@@ -240,7 +240,6 @@ def generateVideo(base_request,req_id):
         num_frames=16,
         guidance_scale=7.5,
         num_inference_steps=25,
-        generator=torch.Generator("cpu").manual_seed(42),
     )
     frames = output.frames[0]
     user_video_path = "user_video" + req_id + ".mp4"
