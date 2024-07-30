@@ -68,6 +68,23 @@ async def generate_roop(base_request: BaseSDRequestRoop):
     except Exception as e:
         print(f"Exception occurred with error as {e}")
         raise HTTPException(status_code=500, detail=str(e))
+    
+@app.post("/generatePose")
+async def generate_pose(base_request: BaseSDRequestRoop):
+    try:
+        req_id = datetime.now().strftime("%Y%m%d%H%M%S")
+
+        generated_image_encoded = generateOpenpose(base_request, req_id)
+
+        return {
+            "prompt": base_request.prompt,
+            "generated_image_encoded": generated_image_encoded
+        }
+
+    except Exception as e:
+        print(f"Exception occurred with error as {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
 
     
 @app.post("/generateVideo")

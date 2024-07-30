@@ -312,13 +312,14 @@ def generateCanny(base_request,req_id):
 
 def generateOpenpose(base_request,req_id):
 
-    user_image = decode_base64_image(base_request.encoded_image)
-    user_image_path = "user_image.png"
+    user_image = decode_base64_image(base_request.pose_image)
+    user_image_path = "user_image" + req_id + ".png"
     user_image.save(user_image_path)
 
     openpose = OpenposeDetector.from_pretrained("lllyasviel/ControlNet")
     openpose_image = openpose(user_image)
-    openpose_image.save("openpose.png")
+    user_image_path = "openpose" + req_id + ".png"
+    openpose_image.save(user_image_path)
     controlnet = ControlNetModel.from_pretrained(
         "lllyasviel/sd-controlnet-openpose", use_safetensors=True
     )
@@ -341,13 +342,24 @@ def generateOpenpose(base_request,req_id):
         guidance_scale=3.0,
         guess_mode=True,
     ).images[0]
-    image.save("openpose_output.png")
 
-    generated_image_encoded = encode_image("openpose_output.png")
+    openpose_output_path = "openpose_output" + req_id + ".png"
+    image.save(openpose_output_path)
+
+    user_roop_image = decode_base64_image(base_request.pose_image)
+    user_roop_image_path = "user_roop_image" + req_id + ".png"
+    user_roop_image.save(user_roop_image_path)
+
+
+    roop_image_path = get_roop_enhanced_image(user_roop_image_path, openpose_output_path,req_id)
+    # print("roopdone")
+    # return roop_image_path
+    generated_image_encoded = encode_image(roop_image_path)
     # once get it encoded, delete the file
-   #  delete_image_file(final_image_path)
+    # delete_image_file(final_image_path)
+    # delete_image_file(user_image_path)
+    # delete_image_file(final_image_path)
     return generated_image_encoded
-
 
 def generateLogo(base_request,req_id):
     # Load the pipeline based on the model path in the request
