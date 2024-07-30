@@ -3,8 +3,8 @@ from fastapi import FastAPI, HTTPException
 import uvicorn
 from pyngrok import ngrok
 from fastapi.middleware.cors import CORSMiddleware
-from models.base_request_model import BaseSDRequestHD, BaseSDRequest, BaseSDRequestVideo, BaseSDRequestLogo, BaseSDRequestCanny,BaseSDRequestOpenpose,BaseSDRequestRoop
-from pipeline.generateImage import generateImage,generateLogo, generateOpenpose,generateVideo, generateCanny,generateRoop
+from base_request_model import BaseSDRequestHD, BaseSDRequest, BaseSDRequestVideo, BaseSDRequestLogo, BaseSDRequestCanny,BaseSDRequestOpenpose,BaseSDRequestRoop
+from generateImage import generateImage,generateLogo, generateOpenpose,generateVideo, generateCanny,generateRoop
 from datetime import datetime
 import cloudinary
 import cloudinary.uploader

@@ -39,8 +39,8 @@ torch.cuda.empty_cache()
 
 #     return ip_model
 
-from utils.imageUtil import decode_base64_image, encode_image, delete_image_file
-from models.base_request_model import BaseSDRequest
+from imageUtil import decode_base64_image, encode_image, delete_image_file
+from base_request_model import BaseSDRequest
 
 import subprocess
 import os
@@ -252,13 +252,11 @@ def generateVideo(base_request,req_id):
     
     # roop_image_path = get_roop_enhanced_video(user_image_path, user_video_path,req_id)
     # print("roopdone")
-    # return roop_image_path
+    return user_video_path
     # generated_image_encoded = encode_image(roop_image_path)
-    generated_image_encoded = encode_image(user_video_path)
     # once get it encoded, delete the file
    #  delete_image_file(final_image_path)
-    return generated_image_encoded
-    # return "okay"
+    # return generated_image_encoded
 
 import re
 from PIL import Image
