@@ -1,7 +1,7 @@
 # set up
 import torch
 from diffusers import StableDiffusionLatentUpscalePipeline, StableDiffusionXLImg2ImgPipeline, AutoPipelineForText2Image, MotionAdapter, AnimateDiffPipeline, DDIMScheduler,StableDiffusionXLControlNetPipeline, ControlNetModel, AutoencoderKL,StableDiffusionControlNetPipeline,UniPCMultistepScheduler,StableDiffusionXLPipeline
-from diffusers.utils import export_to_video,load_image, make_image_grid
+from diffusers.utils import export_to_video,load_image, make_image_grid , export_to_gif
 from PIL import Image
 import cv2
 import numpy as np
@@ -239,25 +239,26 @@ def generateVideo(base_request,req_id):
         num_inference_steps=25,
     )
     frames = output.frames[0]
-    user_video_path = "user_video" + req_id + ".mp4"
-    export_to_video(frames, user_video_path)
+    user_video_path = "user_video" + req_id + ".gif"
+    # export_to_video(frames, user_video_path)
+    export_to_gif(frames, user_video_path)
 
     # Set your Cloudinary credentials
-    cloudinary.config( 
-        cloud_name = "dwouepph4", 
-        api_key = "945814147879561", 
-        api_secret = "YJtSjnAwmuni7Rcw25wYiN3pMIs" 
-    )
+    # cloudinary.config( 
+    #     cloud_name = "dwouepph4", 
+    #     api_key = "945814147879561", 
+    #     api_secret = "YJtSjnAwmuni7Rcw25wYiN3pMIs" 
+    # )
 
     # # Upload the image
     # print(generated_image_encoded)
     # uploadStr = 'data:video/mp4;base64,' + generated_image_encoded
-    upload_response = cloudinary.uploader.upload(user_video_path,resource_type="video")
+    # upload_response = cloudinary.uploader.upload(user_video_path,resource_type="video")
 
-    # Get the image URL
-    image_url = upload_response["secure_url"]
+    # # Get the image URL
+    # image_url = upload_response["secure_url"]
 
-    return image_url
+    # return image_url
 
 
     # final_image_path = "output.png"
