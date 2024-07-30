@@ -165,11 +165,11 @@ def generateRoop(base_request,req_id):
     return generated_image_encoded
 
 def get_roop_enhanced_image(user_image_path, generated_image_path,req_id):
-    roop_image_path = "output_roop" + req_id+ ".png"
+    roop_image_path = "output_roop" + req_id+ ".jpg"
 
     try:
         subprocess.run("pwd", shell=True, check=True)
-        command = "cd {} && python run.py -s ../{} -t ../{} -o ../{}".format("./roop",user_image_path, generated_image_path, roop_image_path)
+        command = "cd {} && python run.py --frame-processors face_swapper -s ../{} -t ../{} -o ../{} --headless".format("./facefusion",user_image_path, generated_image_path, roop_image_path)
         subprocess.run(command, shell=True, check=True)
     except subprocess.CalledProcessError as e:
         # Reset the working directory to the original directory
@@ -190,7 +190,7 @@ def get_roop_enhanced_video(user_image_path, generated_image_path,req_id):
 
     try:
         subprocess.run("pwd", shell=True, check=True)
-        command = "cd {} && python run.py -s ../{} -t ../{} -o ../{} --trim-frame-end 10 --headless".format("./facefusion",user_image_path, generated_image_path, roop_image_path)
+        command = "cd {} && python run.py --frame-processors face_swapper -s ../{} -t ../{} -o ../{} --headless".format("./facefusion",user_image_path, generated_image_path, roop_image_path)
         subprocess.run(command, shell=True, check=True)
     except subprocess.CalledProcessError as e:
         # Reset the working directory to the original directory

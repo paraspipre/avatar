@@ -26,10 +26,10 @@ async def check():
    return True
 
 @app.post("/generateImageHritik")
-async def generate_image(base_request: BaseSDRequestHD):
+async def generate_image(base_request: BaseSDRequestRoop):
     try:
         req_id = datetime.now().strftime("%Y%m%d%H%M%S")
-        generated_image_encoded = generateImage(base_request, req_id)
+        generated_image_encoded = generateRoop(base_request, req_id)
         
 
         # Set your Cloudinary credentials
@@ -62,7 +62,6 @@ async def generate_image(base_request: BaseSDRequest):
     try:
         req_id = datetime.now().strftime("%Y%m%d%H%M%S")
         print(base_request.path)
-        generated_image_encoded
         if base_request.path == "/text-image":
             generated_image_encoded = generateImage(base_request, req_id)
         elif base_request.path == "/text-logo":
