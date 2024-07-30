@@ -348,7 +348,7 @@ def generateOpenpose(base_request,req_id):
     openpose_output_path = "openpose_output" + req_id + ".png"
     image.save(openpose_output_path)
 
-    user_roop_image = decode_base64_image(base_request.pose_image)
+    user_roop_image = decode_base64_image(base_request.encoded_image)
     user_roop_image_path = "user_roop_image" + req_id + ".png"
     user_roop_image.save(user_roop_image_path)
 
