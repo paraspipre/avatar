@@ -229,12 +229,6 @@ def generateVideo(base_request,req_id):
     # user_image.save(user_image_path)
 
     output = pipe(
-        # prompt=(
-        #     "masterpiece, bestquality, highlydetailed, ultradetailed, sunset, "
-        #     "orange sky, warm lighting, fishing boats, ocean waves seagulls, "
-        #     "rippling water, wharf, silhouette, serene atmosphere, dusk, evening glow, "
-        #     "golden hour, coastal landscape, seaside scenery"
-        # ),
         prompt=base_request.prompt,
         negative_prompt=base_request.negative_prompt,
         num_frames=16,
@@ -248,15 +242,13 @@ def generateVideo(base_request,req_id):
     # final_image_path = "output.png"
     # image.save(final_image_path)
     # image.save("output_preview.png")
-    # print("roopstart")
     
     # roop_image_path = get_roop_enhanced_video(user_image_path, user_video_path,req_id)
-    # print("roopdone")
-    return user_video_path
     # generated_image_encoded = encode_image(roop_image_path)
+    generated_image_encoded = encode_image(user_video_path)
     # once get it encoded, delete the file
    #  delete_image_file(final_image_path)
-    # return generated_image_encoded
+    return generated_image_encoded
 
 import re
 from PIL import Image
