@@ -57,8 +57,6 @@ async def generate_roop(base_request: BaseSDRequestRoop):
             generated_image_encoded = generateRoop(base_request, req_id)
         elif base_request.path == "/text-canny":
             generated_image_encoded = generateCanny(base_request, req_id)
-        elif base_request.path == "/pose-image":
-            generated_image_encoded = generateOpenpose(base_request, req_id)
 
         return {
             "prompt": base_request.prompt,

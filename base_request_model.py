@@ -24,6 +24,7 @@ class BaseSDRequestRoop(BaseModel):
     num_inference_steps: int = 30
     guidance_scale:float = 7.5
     num_images_per_prompt:int = 1
+    path:str
 
 class BaseSDRequestRoopPose(BaseModel):
     prompt: str ="superman"
