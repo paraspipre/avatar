@@ -96,7 +96,7 @@ async def generate_video(base_request: BaseSDRequest):
         
         return {
             "prompt": base_request.prompt,
-            "generated_image_encoded": image_url
+            "generated_image_encoded": generated_image_encoded
         }
 
     except Exception as e:
