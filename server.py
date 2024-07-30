@@ -3,7 +3,7 @@ from fastapi import FastAPI, HTTPException
 import uvicorn
 from pyngrok import ngrok
 from fastapi.middleware.cors import CORSMiddleware
-from base_request_model import  BaseSDRequest, BaseSDRequestRoop
+from base_request_model import  BaseSDRequest, BaseSDRequestRoop ,BaseSDRequestRoopPose
 from generateImage import generateImage,generateLogo, generateOpenpose,generateVideo, generateCanny,generateRoop
 from datetime import datetime
 import cloudinary
@@ -70,7 +70,7 @@ async def generate_roop(base_request: BaseSDRequestRoop):
         raise HTTPException(status_code=500, detail=str(e))
     
 @app.post("/generatePose")
-async def generate_pose(base_request: BaseSDRequestRoop):
+async def generate_pose(base_request: BaseSDRequestRoopPose):
     try:
         req_id = datetime.now().strftime("%Y%m%d%H%M%S")
 
