@@ -7,6 +7,9 @@ import cv2
 import numpy as np
 from compel import Compel, ReturnedEmbeddingsType
 
+import cloudinary
+import cloudinary.uploader
+
 from controlnet_aux import OpenposeDetector
 
 # from utils.control_net_utils import CONTROLNET_MAPPING
@@ -238,6 +241,24 @@ def generateVideo(base_request,req_id):
     frames = output.frames[0]
     user_video_path = "user_video" + req_id + ".mp4"
     export_to_video(frames, user_video_path)
+
+    # Set your Cloudinary credentials
+    cloudinary.config( 
+        cloud_name = "dwouepph4", 
+        api_key = "945814147879561", 
+        api_secret = "YJtSjnAwmuni7Rcw25wYiN3pMIs" 
+    )
+
+    # # Upload the image
+    # print(generated_image_encoded)
+    # uploadStr = 'data:video/mp4;base64,' + generated_image_encoded
+    upload_response = cloudinary.uploader.upload(user_video_path)
+
+    # Get the image URL
+    image_url = upload_response["secure_url"]
+
+    return image_url
+
 
     # final_image_path = "output.png"
     # image.save(final_image_path)

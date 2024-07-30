@@ -93,21 +93,7 @@ async def generate_video(base_request: BaseSDRequest):
 
         generated_image_encoded = generateVideo(base_request, req_id)
 
-        # Set your Cloudinary credentials
-        cloudinary.config( 
-            cloud_name = "dwouepph4", 
-            api_key = "945814147879561", 
-            api_secret = "YJtSjnAwmuni7Rcw25wYiN3pMIs" 
-        )
-
-        # Upload the image
-        print(generated_image_encoded)
-        uploadStr = 'data:video/mp4;base64,' + generated_image_encoded
-        upload_response = cloudinary.uploader.upload(uploadStr)
-
-        # Get the image URL
-        image_url = upload_response["secure_url"]
-
+        
         return {
             "prompt": base_request.prompt,
             "generated_image_encoded": image_url
