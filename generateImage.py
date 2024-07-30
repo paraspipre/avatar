@@ -245,10 +245,10 @@ def generateVideo(base_request,req_id):
     
     # roop_image_path = get_roop_enhanced_video(user_image_path, user_video_path,req_id)
     # generated_image_encoded = encode_image(roop_image_path)
-    # generated_image_encoded = encode_image(user_video_path)
+    generated_image_encoded = encode_image(user_video_path)
     # once get it encoded, delete the file
    #  delete_image_file(final_image_path)
-    return user_video_path
+    return generated_image_encoded
 
 import re
 from PIL import Image
@@ -411,40 +411,3 @@ def generateLogo(base_request,req_id):
     # once get it encoded, delete the file
    #  delete_image_file(final_image_path)
     return generated_image_encoded
-
-
-
-
-# def run_generate(base_request,req_id) -> str:
-#     final_image_path = generate_image(base_request, req_id)
-#     generated_image_encoded = encode_image(final_image_path)
-#     # once get it encoded, delete the file
-#    #  delete_image_file(final_image_path)
-#     return generated_image_encoded
-
-
-
-# def main():
-#     # generate mask
-#     user_image_path = "../assets/sample_user_image.png"
-#     prompt = "deadpool shooting with guns"
-#     # Create an instance of InpaintRequest
-#     control_type = "pose"
-#     control_net_image_path = "../assets/poses/pose (1).jpg"
-
-#     from utils.image_utils import encode_image
-
-#     encoded_ip_image = encode_image(user_image_path)
-#     encoded_control_net_image = encode_image(control_net_image_path)
-#     request = BaseSDRequest(prompt=prompt,
-#                           control_type=control_type,
-#                           encoded_ip_image=encoded_ip_image,
-#                           encoded_control_net_image=encoded_control_net_image,
-#                           height=512,
-#                           width=512)
-
-#     # Call the run_inpaint function with the request
-#     generate_image(request)
-
-# if __name__ == "__main__":
-#     main()
