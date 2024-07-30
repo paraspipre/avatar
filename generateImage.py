@@ -420,9 +420,6 @@ def generateLogo(base_request,req_id):
     # sd_pipe.controlnet_conditioning_scale = base_request.controlnet_conditioning_scale
     # sd_pipe.num_inference_steps = base_request.num_inference_steps
 
-    user_image = decode_base64_image(base_request.encoded_image)
-    user_image_path = "user_image" + req_id + ".png"
-    user_image.save(user_image_path)
 
     import random
     random_seed = random.randint(1, 1000000)

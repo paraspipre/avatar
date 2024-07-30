@@ -35,8 +35,6 @@ async def generate_image(base_request: BaseSDRequest):
             generated_image_encoded = generateImage(base_request, req_id)
         elif base_request.path == "/text-logo":
             generated_image_encoded = generateLogo(base_request, req_id)
-        elif base_request.path == "/text-video":
-            generated_image_encoded = generateVideo(base_request, req_id)
 
         return {
             "prompt": base_request.prompt,
