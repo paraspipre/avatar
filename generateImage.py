@@ -245,10 +245,10 @@ def generateVideo(base_request,req_id):
     
     # roop_image_path = get_roop_enhanced_video(user_image_path, user_video_path,req_id)
     # generated_image_encoded = encode_image(roop_image_path)
-    generated_image_encoded = encode_image(user_video_path)
+    # generated_image_encoded = encode_image(user_video_path)
     # once get it encoded, delete the file
    #  delete_image_file(final_image_path)
-    return generated_image_encoded
+    return user_video_path
 
 import re
 from PIL import Image
