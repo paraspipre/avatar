@@ -252,7 +252,7 @@ def generateVideo(base_request,req_id):
     # # Upload the image
     # print(generated_image_encoded)
     # uploadStr = 'data:video/mp4;base64,' + generated_image_encoded
-    upload_response = cloudinary.uploader.upload(user_video_path)
+    upload_response = cloudinary.uploader.upload(user_video_path,resource_type="video")
 
     # Get the image URL
     image_url = upload_response["secure_url"]
