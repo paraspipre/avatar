@@ -258,7 +258,7 @@ from io import BytesIO
 def generateCanny(base_request,req_id):
 
     user_image = decode_base64_image(base_request.encoded_image)
-    user_image_path = "user_image.png"
+    user_image_path = "user_image" + req_id + ".png"
     user_image.save(user_image_path)
     image = np.array(user_image)
 
@@ -269,7 +269,8 @@ def generateCanny(base_request,req_id):
     image = image[:, :, None]
     image = np.concatenate([image, image, image], axis=2)
     canny_image = Image.fromarray(image)
-    canny_image.save("cannyImage.png")
+    canny_image_path = "canny_image" + req_id + ".png"
+    canny_image.save(canny_image_path)
 
     # controlnet = ControlNetModel.from_pretrained(
     #     "diffusers/controlnet-canny-sdxl-1.0",
@@ -303,9 +304,10 @@ def generateCanny(base_request,req_id):
         guidance_scale=3.0,
         guess_mode=True,
     ).images[0]
-    image.save("canny_output.png")
+    canny_output_image_path = "canny_output_image" + req_id + ".png"
+    image.save(canny_output_image_path)
 
-    generated_image_encoded = encode_image("canny_output.png")
+    generated_image_encoded = encode_image(canny_output_image_path)
     # once get it encoded, delete the file
    #  delete_image_file(final_image_path)
     return generated_image_encoded
@@ -318,8 +320,8 @@ def generateOpenpose(base_request,req_id):
 
     openpose = OpenposeDetector.from_pretrained("lllyasviel/ControlNet")
     openpose_image = openpose(user_image)
-    user_image_path = "openpose" + req_id + ".png"
-    openpose_image.save(user_image_path)
+    user_pose_image_path = "openpose" + req_id + ".png"
+    openpose_image.save(user_pose_image_path)
     controlnet = ControlNetModel.from_pretrained(
         "lllyasviel/sd-controlnet-openpose", use_safetensors=True
     )

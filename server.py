@@ -103,6 +103,7 @@ async def generate_video(base_request: BaseSDRequest):
         )
 
         # Upload the image
+        print(generated_image_encoded)
         uploadStr = 'data:video/mp4;base64,' + generated_image_encoded
         upload_response = cloudinary.uploader.upload(uploadStr)
 
