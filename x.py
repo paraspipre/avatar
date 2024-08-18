@@ -1,6 +1,7 @@
 import requests
 
-API_URL = "https://api-inference.huggingface.co/models/sd-dreambooth-library/homelander"
+API_URL = "https://api-inference.huggingface.co/models/Lykon/DreamShaper"
+# API_URL = "https://api-inference.huggingface.co/models/sd-dreambooth-library/homelander"
 headers = {"Authorization": "Bearer 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"}
 
 def query(payload):
